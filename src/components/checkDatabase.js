@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, push, get } from "firebase/database";
+import { getDatabase, ref, get } from "firebase/database";
 import Navbar from "./navbar";
 
 const firebaseConfig = {
