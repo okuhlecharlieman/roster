@@ -71,7 +71,7 @@ function Home() {
 
     // Set all the data at once
     set(nameDateListRef, dataToStore);
-  }, []);
+  }, [repeatedNamesWithDates]);
 
   return (
     <div>
