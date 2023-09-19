@@ -1,14 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getDatabase, ref, set, push } from "firebase/database";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 import Navbar from "./navbar";
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyB4uGFMKtpzZvCaRi_HYMq4EXAq9EskHv8",
+  authDomain: "roster-c9cd7.firebaseapp.com",
+  databaseURL: "https://roster-c9cd7-default-rtdb.firebaseio.com",
+  projectId: "roster-c9cd7",
+  storageBucket: "roster-c9cd7.appspot.com",
+  messagingSenderId: "447760829686",
+  appId: "1:447760829686:web:42b3438ff9f1c0dce130d7",
+  measurementId: "G-4112R2S4TM",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const database = getDatabase(app);
 
 const names = ["Thando", "Athabile", "Mama", "Charlie"];
+const iteration = 7;
 
 function Home() {
   // Create an array to store the repeated names and dates
   const repeatedNamesWithDates = [];
 
   // Repeatedly select and add different names with dates seven times
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < iteration; i++) {
     const randomIndex = Math.floor(Math.random() * names.length);
     const selectedName = names[randomIndex];
 
@@ -27,7 +51,21 @@ function Home() {
 
     repeatedNamesWithDates.push({ name: selectedName, date: formattedDate });
   }
+  useEffect(() => {
+    repeatedNamesWithDates.forEach((item) => {
+      // Get a reference to the "nameDateList" node in the database
+      const nameDateListRef = ref(database, "namedDateList");
 
+      // Generate a new push key for the item
+      const newItemRef = push(nameDateListRef);
+
+      // Set the data for the item
+      set(newItemRef, {
+        name: item.name,
+        date: item.date,
+      });
+    });
+  }, []);
   return (
     <div>
       <Navbar />
