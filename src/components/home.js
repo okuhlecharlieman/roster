@@ -52,20 +52,27 @@ function Home() {
     repeatedNamesWithDates.push({ name: selectedName, date: formattedDate });
   }
   useEffect(() => {
-    repeatedNamesWithDates.forEach((item) => {
-      // Get a reference to the "nameDateList" node in the database
-      const nameDateListRef = ref(database, "namedDateList");
+    // Get a reference to the "nameDateList" node in the database
+    const nameDateListRef = ref(database, "namedDateList");
 
-      // Generate a new push key for the item
-      const newItemRef = push(nameDateListRef);
+    // Create an object to store all the data
+    const dataToStore = {};
 
-      // Set the data for the item
-      set(newItemRef, {
+    repeatedNamesWithDates.forEach((item, index) => {
+      // Generate a unique key for each item
+      const newItemKey = push(nameDateListRef).key;
+
+      // Add the item's data under the unique key in the object
+      dataToStore[newItemKey] = {
         name: item.name,
         date: item.date,
-      });
+      };
     });
+
+    // Set all the data at once
+    set(nameDateListRef, dataToStore);
   }, []);
+
   return (
     <div>
       <Navbar />
