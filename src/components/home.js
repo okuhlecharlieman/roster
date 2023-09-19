@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 
@@ -28,29 +28,29 @@ const names = ["Thando", "Athabile", "Mama", "Charlie"];
 const iteration = 7;
 
 function Home() {
-  // Create an array to store the repeated names and dates
-  const repeatedNamesWithDates = [];
+  // Wrap the initialization in useMemo to prevent it from changing on every render
+  const repeatedNamesWithDates = useMemo(() => {
+    const result = [];
 
-  // Repeatedly select and add different names with dates seven times
-  for (let i = 0; i < iteration; i++) {
-    const randomIndex = Math.floor(Math.random() * names.length);
-    const selectedName = names[randomIndex];
+    for (let i = 0; i < iteration; i++) {
+      const randomIndex = Math.floor(Math.random() * names.length);
+      const selectedName = names[randomIndex];
 
-    // Create a new Date object to get the current date and time
-    const currentDate = new Date();
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1;
+      const day = currentDate.getDate() + i;
 
-    // Extract the date components (year, month, day)
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth() + 1; // Note: Months are zero-indexed, so we add 1.
-    const day = currentDate.getDate() + i;
+      const formattedDate = `${day.toString().padStart(2, "0")}-${month
+        .toString()
+        .padStart(2, "0")}-${year}`;
 
-    // Format the date as a string (e.g., "YYYY-MM-DD")
-    const formattedDate = `${day.toString().padStart(2, "0")}-${month
-      .toString()
-      .padStart(2, "0")}-${year}`;
+      result.push({ name: selectedName, date: formattedDate });
+    }
 
-    repeatedNamesWithDates.push({ name: selectedName, date: formattedDate });
-  }
+    return result;
+  }, []);
+  // Push data to Firebase outside of the useEffect
   useEffect(() => {
     // Get a reference to the "nameDateList" node in the database
     const nameDateListRef = ref(database, "namedDateList");
@@ -69,7 +69,7 @@ function Home() {
       };
     });
 
-    // Set all the data at once
+    // Set all the data in one operation
     set(nameDateListRef, dataToStore);
   }, [repeatedNamesWithDates]);
 
