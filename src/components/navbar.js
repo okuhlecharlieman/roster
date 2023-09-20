@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Logo from "./logo";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PinEntry from "./PinEntry"; // Import the PinEntry component
 
 function Navbar() {
@@ -61,12 +61,6 @@ function Navbar() {
               d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
             />
           </svg>
-          <input
-            className="focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-slate-200 shadow-sm"
-            type="text"
-            aria-label="Filter projects"
-            placeholder="Filter projects..."
-          />
         </form>
       </header>
     </div>
