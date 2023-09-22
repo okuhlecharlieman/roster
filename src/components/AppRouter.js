@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Admin from "./home";
 import Home from "./checkDatabase";
-// import FOF from "./fof";
 
 const AppRouter = () => {
   return (
